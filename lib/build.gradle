@@ -1,0 +1,59 @@
+// El bloque buildscript es para configurar a Gradle como tal
+// Es para descargar las dependencias que configuraran a Gradle como tal, no hacen parte del codigo fuente.
+buildscript {
+    repositories {
+    	mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+    // De aqui viene el plugin aggregator que esta en la linea 4
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.80")
+    }
+}
+
+
+plugins {  
+    id 'java-library'
+}
+
+// Para agregar un comando que se llama aggregate, que es de Serenity y es para construir el reporte
+apply plugin: 'net.serenity-bdd.aggregator'
+
+repositories {
+  	    mavenLocal()
+        mavenCentral()
+        jcenter()
+}
+
+dependencies {
+// Dependencias para poder automatizar con Serenity
+	// https://mvnrepository.com/artifact/net.serenity-bdd/serenity-junit
+implementation group: 'net.serenity-bdd', name: 'serenity-junit', version: '3.1.1'
+
+// https://mvnrepository.com/artifact/net.serenity-bdd/serenity-cucumber
+implementation group: 'net.serenity-bdd', name: 'serenity-cucumber', version: '3.0.5'
+
+// https://mvnrepository.com/artifact/net.serenity-bdd/serenity-core
+implementation group: 'net.serenity-bdd', name: 'serenity-core', version: '3.1.0'
+
+// https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+
+// https://mvnrepository.com/artifact/com.google.guava/guava
+implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
+
+ testImplementation 'junit:junit:4.13'
+
+}
+
+// Para configurar propiedades del comando de ejecucion de pruebas con Gradle
+test {
+//Ignorar los fallos es ejecutar todas las pruebas asi alguna falle
+	ignoreFailures = true
+	useJUnitPlatform()
+}
+
+
+// Continue asi falle alguna tarea de Gradle
+gradle.startParameter.continueOnFailure = true
